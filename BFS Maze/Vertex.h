@@ -7,6 +7,11 @@
 //	For directed graphs, however, the current implementation works well enough - each vertex maintains
 //	a list of its outgoing edges.
 
+//	when I eventually update this for both vertices to contain the edge, edge vectors must be updated to be
+//	vectors of edge pointers -- this way, both vertices will have a pointer to the same edge, rather than two copies
+//	of the same edge, and when that edge is visited in any pass, it will be considered visited from the other vertex's perspective
+//	as well.
+
 template <typename T> class Vertex
 {
 private:
@@ -42,18 +47,18 @@ public:
 	{
 		//	Create a new edge connecting this vertex with a new vertex of data val
 		//	with this edge having weight w.
-		edges.push_back(new Edge(new Vertex<T>(val), w));
+		edges.push_back(Edge(new Vertex<T>(val), w));
 	}
 
 	void connectTo(Vertex<T>& vert, int w = 1)	//	Function to connect to another already-created vertex.
 	{
 		//	Connect to a pre-existing vertex
-		edges.emplace_back(new Edge(vert, w));
+		edges.push_back(Edge(&vert, w));
 	}
 
 	T visit()	//	mark this node as visited and get its data value.
 	{
-		visted = true;
+		visited = true;
 		return data;
 	}
 
@@ -61,9 +66,9 @@ public:
 	{
 		std::vector<Vertex<T>> result;
 
-		for (std::vector<Edge>::iterator iter = edges.begin(); iter != edges.end(); ++iter)
+		for (auto& e : edges)
 		{
-			result.push_back(iter->getDest());
+			result.push_back(e.getDest());
 		}
 
 		return result;
@@ -74,10 +79,11 @@ public:
 	{
 		std::vector<Vertex<T>> result;
 
-		for (std::vector<Edge>::iterator iter = edges.begin(); iter != edges.end(); ++iter)
+
+		for (auto& e : edges)
 		{
-			if (!(iter->getDest().visited))
-				result.push_back(*iter);
+			if (!(e.getDest().visited))
+				result.push_back(e.getDest());	//	using implicit copy constructor
 		}
 
 		return result;

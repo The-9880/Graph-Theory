@@ -14,25 +14,35 @@ public:
 
 	static void BFS(Vertex<T>& v, T target)	//	Breadth-first search function for seeking a specific T.
 	{
-		std::queue<Vertex<T>> verts;
+		std::queue<Vertex<T>*> verts;
 
-		verts.push(v);
+		verts.push(&v);
 
 		while (!verts.empty())	//	while we have vertices to perform BFS on
 		{
-			T data = verts.front().visit();	//	visit the next node in the queue
+			T data = verts.front()->visit();	//	visit the next node in the queue
 			if (data == target)
 			{
 				std::cout << "Found target!\n";
 				return;
 			}
-
-			std::vector<Vertex<T>> unvis = verts.front().getUnvisitedVertices();	//	get a list of this node's unvisited neighbours.
-			verts.pop();	//	pop our visited node off the list once we've gotten the next-level nodes.
-
-			for (auto& u : unvis)	//	place each next-level node in the queue.
+			else
 			{
-				verts.push(u);
+				std::cout << "Found: " << data << std::endl;
+			}
+
+			//	IDENTIFIED AS PROBLEM LINE: (4/5/18)
+			std::vector<Vertex<T>*> unvis = std::move(verts.front()->getUnvisitedVertices());	//	get a list of this node's unvisited neighbours.
+			verts.front()->getUnvisitedVertices();
+			verts.pop();	//	pop our visited node off the list once we've gotten the next-level nodes.
+			
+			std::cout << "TEST:" << unvis[0]->peek() << std::endl;
+
+
+
+			for (typename std::vector<Vertex<T>*>::iterator iter = unvis.begin(); iter != unvis.end(); ++iter)	//	place each next-level node in the queue.
+			{
+				verts.push(*iter);
 			}
 			unvis.clear();	//	clear my temporary list.
 

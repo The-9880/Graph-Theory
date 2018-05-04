@@ -62,30 +62,36 @@ public:
 		return data;
 	}
 
-	std::vector<Vertex<T>> getVertices()	//	returns a vector of vertices connect to this one.
+	std::vector<Vertex<T>*> getVertices()	//	returns a vector of vertices connect to this one.
 	{
-		std::vector<Vertex<T>> result;
-
-		for (auto& e : edges)
+		std::vector<Vertex<T>*> result;
+		
+		for (typename std::vector<Edge>::iterator iter = edges.begin(); iter != edges.end(); ++iter)
 		{
-			result.push_back(e.getDest());
+			result.push_back(&(iter->getDest()));
 		}
 
 		return result;
 	}
 
 
-	std::vector<Vertex<T>> getUnvisitedVertices()	//	returns a list of unvisited vertices connect to this one.
+	std::vector<Vertex<T>*> getUnvisitedVertices()	//	returns a list of unvisited vertices connect to this one.
 	{
-		std::vector<Vertex<T>> result;
+		std::vector<Vertex<T>*> result;
 
 
-		for (auto& e : edges)
+		for(typename std::vector<Edge>::iterator iter = edges.begin(); iter != edges.end(); ++iter)
 		{
-			if (!(e.getDest().visited))
-				result.push_back(e.getDest());	//	using implicit copy constructor
+			if (!(iter->getDest().visited))
+				result.push_back(&(iter->getDest()));	//	using implicit copy constructor
+			std::cout << iter->getDest().peek() << std::endl;
 		}
 
 		return result;
+	}
+
+	T peek()
+	{
+		return data;
 	}
 };

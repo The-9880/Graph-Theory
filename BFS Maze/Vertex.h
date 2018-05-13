@@ -74,23 +74,23 @@ public:
 		return result;
 	}
 
-
 	std::vector<Vertex<T>*> getUnvisitedVertices()	//	returns a list of unvisited vertices connect to this one.
 	{
 		std::vector<Vertex<T>*> result;
 
-
+		std::cout << "Print from getUnvisitedVertices()" << std::endl;
 		for(typename std::vector<Edge>::iterator iter = edges.begin(); iter != edges.end(); ++iter)
 		{
 			if (!(iter->getDest().visited))
-				result.push_back(&(iter->getDest()));	//	using implicit copy constructor
+				result.push_back(&(iter->getDest()));	//	as of C++11, should perform a move and safely create pointers to these addresses.
 			std::cout << iter->getDest().peek() << std::endl;
 		}
+		std::cout << std::endl;
 
 		return result;
 	}
 
-	T peek()
+	T peek()	//	Function for testing purposes.
 	{
 		return data;
 	}

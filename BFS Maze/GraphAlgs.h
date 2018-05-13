@@ -32,21 +32,17 @@ public:
 			}
 
 			//	IDENTIFIED AS PROBLEM LINE: (4/5/18)
-			std::vector<Vertex<T>*> unvis = std::move(verts.front()->getUnvisitedVertices());	//	get a list of this node's unvisited neighbours.
-			verts.front()->getUnvisitedVertices();
+			std::vector<Vertex<T>*> unvis = std::move(verts.front()->getUnvisitedVertices());	//	implicit move; get a list of this node's unvisited neighbours.
+			verts.front()->getUnvisitedVertices();	//	Second check to ensure my original pointer aren't invalidated; they aren't.
 			verts.pop();	//	pop our visited node off the list once we've gotten the next-level nodes.
 			
 			std::cout << "TEST:" << unvis[0]->peek() << std::endl;
-
-
 
 			for (typename std::vector<Vertex<T>*>::iterator iter = unvis.begin(); iter != unvis.end(); ++iter)	//	place each next-level node in the queue.
 			{
 				verts.push(*iter);
 			}
 			unvis.clear();	//	clear my temporary list.
-
-
 		}
 
 		std::cout << "Could not find target in the graph.\n";

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <functional>
 
 //	worth noting that if I want to add the edges as connections to both vertices' edge lists instead of
 //	just the 'source' vertex (as this currently mimics a directed graph), I could add a boolean for visitations
@@ -24,7 +25,7 @@ private:
 		Edge(Vertex<T>* dst, int w = 1) : weight(w), dest(dst)
 		{
 		}
-		Vertex<T> getDest()
+		Vertex<T>& getDest()
 		{
 			return *dest;
 		}
@@ -62,6 +63,7 @@ public:
 		return data;
 	}
 
+	//	Commit 7: Will update this function accordingly... if it becomes needed. Probably will anyways, for sake of completeness.
 	std::vector<Vertex<T>*> getVertices()	//	returns a vector of vertices connect to this one.
 	{
 		std::vector<Vertex<T>*> result;
@@ -74,16 +76,16 @@ public:
 		return result;
 	}
 
-	std::vector<Vertex<T>*> getUnvisitedVertices()	//	returns a list of unvisited vertices connect to this one.
+	std::vector<std::reference_wrapper<Vertex<T>>> getUnvisitedVertices()	//	returns a list of unvisited vertices connect to this one.
 	{
-		std::vector<Vertex<T>*> result;
+		std::vector<std::reference_wrapper<Vertex<T>>> result;
 
 		std::cout << "Print from getUnvisitedVertices()" << std::endl;
-		for(typename std::vector<Edge>::iterator iter = edges.begin(); iter != edges.end(); ++iter)
+		for(auto& edge : edges)
 		{
-			if (!(iter->getDest().visited))
-				result.push_back(&(iter->getDest()));	//	as of C++11, should perform a move and safely create pointers to these addresses.
-			std::cout << iter->getDest().peek() << std::endl;
+			if (!(edge.getDest().visited))
+				result.push_back(edge.getDest());	//	as of C++11, should perform a move and safely create pointers to these addresses.
+			std::cout << edge.getDest().peek() << std::endl;
 		}
 		std::cout << std::endl;
 

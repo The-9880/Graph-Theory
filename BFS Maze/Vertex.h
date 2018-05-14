@@ -44,27 +44,30 @@ public:
 
 	Vertex<T>(T d) : data(d) {}	//	simple constructor.
 
-	void addNeighbour(T val, int w = 1)	//	Adds a neighbouring vertex with a value along a weighted edge.
+	//	Adds a neighbouring vertex with a value along a weighted edge.
+	void addNeighbour(T val, int w = 1)	
 	{
-		//	Create a new edge connecting this vertex with a new vertex of data val
-		//	with this edge having weight w.
+		//	Create a new edge of weight w connecting to a new vertex of data val.
 		edges.push_back(Edge(new Vertex<T>(val), w));
 	}
 
-	void connectTo(Vertex<T>& vert, int w = 1)	//	Function to connect to another already-created vertex.
+	//	Function to connect to another already-created vertex.
+	void connectTo(Vertex<T>& vert, int w = 1)	
 	{
 		//	Connect to a pre-existing vertex
 		edges.push_back(Edge(&vert, w));
 	}
 
-	T visit()	//	mark this node as visited and get its data value.
+	//	Mark this node as visited and get its data value.
+	T visit()
 	{
 		visited = true;
 		return data;
 	}
 
 	//	Commit 7: Will update this function accordingly... if it becomes needed. Probably will anyways, for sake of completeness.
-	std::vector<Vertex<T>*> getVertices()	//	returns a vector of vertices connect to this one.
+	//	Get a vector of vertices connect to this one.
+	std::vector<Vertex<T>*> getVertices()	
 	{
 		std::vector<Vertex<T>*> result;
 		
@@ -76,7 +79,8 @@ public:
 		return result;
 	}
 
-	std::vector<std::reference_wrapper<Vertex<T>>> getUnvisitedVertices()	//	returns a list of unvisited vertices connect to this one.
+	//	Get a list of unvisited vertices connect to this one.
+	std::vector<std::reference_wrapper<Vertex<T>>> getUnvisitedVertices()	
 	{
 		std::vector<std::reference_wrapper<Vertex<T>>> result;
 
@@ -92,7 +96,8 @@ public:
 		return result;
 	}
 
-	T peek()	//	Function for testing purposes.
+	//	Function for testing purposes.
+	T peek()	
 	{
 		return data;
 	}

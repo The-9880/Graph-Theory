@@ -12,7 +12,8 @@ public:
 	GraphAlgs() {};
 	~GraphAlgs() {};
 
-	static void BFS(Vertex<T>& v, T target)	//	Breadth-first search function for seeking a specific T.
+	//	Breadth-first search function for seeking a specific T.
+	static void BFS(Vertex<T>& v, T target)	
 	{
 		std::queue<Vertex<T>*> verts;
 
@@ -31,9 +32,6 @@ public:
 				std::cout << "Found: " << data << std::endl;
 			}
 
-
-
-			//	IDENTIFIED AS PROBLEM LINE: (4/5/18)
 			std::vector<std::reference_wrapper<Vertex<T>>> unvis = verts.front()->getUnvisitedVertices();	//	implicit move; get a list of this node's unvisited neighbours.
 			verts.pop();	//	pop our visited node off the list once we've gotten the next-level nodes.
 
@@ -43,7 +41,6 @@ public:
 			}
 			unvis.clear();	//	clear my temporary list.
 		}
-
 		std::cout << "Could not find target in the graph.\n";
 	}
 };

@@ -31,13 +31,7 @@ public:
 				std::cout << "Found target!\n";
 
 				//	Unmark the vertices.
-				std::cout << "UNMARKING THE FOLLOWING VERTICES: " << std::endl;
-				for (auto& unMark : allVisited)
-				{
-					std::cout << unMark->peek() << std::endl;
-					unMark->visited = false;
-				}
-				std::cout << "DONE UNMARKING." << std::endl;
+				unmarkNodes(allVisited);
 
 				// return; nothing else to be done here.
 				return;
@@ -63,13 +57,18 @@ public:
 		std::cout << "Could not find target in the graph.\n";
 
 		//	Now to unmark the vertices I marked during the search.
-		std::cout << "UNMARKING THE FOLLOWING VERTICES: " << std::endl;
-		for (auto& unMark : allVisited)
+		unmarkNodes(allVisited);
+	}
+
+private:
+
+	//	Used to unmark nodes in a list of pointers to vertices; not in use yet because I'd like to retain the testing code I have.
+	static void unmarkNodes(std::list<Vertex<T>*>& aList)
+	{
+		for (auto& unMark : aList)
 		{
-			std::cout << unMark->peek() << std::endl;
 			unMark->visited = false;
 		}
-		std::cout << "DONE UNMARKING." << std::endl;
 	}
 };
 

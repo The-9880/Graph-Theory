@@ -32,11 +32,9 @@ int main()
 
 	v7.addNeighbour('T');
 	GraphAlgs<char>::BFS(v1, 'T');
-	GraphAlgs<char>::BFS(v1, 'T');
 
-	//	Fail case that should pass
-	GraphAlgs<char>::BFS(v7, 'S');	//	This case fails because the implementation doesn't add edges to both vertices' lists.
-									//	It will pass when that has been changed and allowed for.
+	GraphAlgs<char>::BFS(v3, 'S');
+	GraphAlgs<char>::BFS(v7, 'S');
 
 
 	system("pause");

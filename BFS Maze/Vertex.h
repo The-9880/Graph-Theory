@@ -2,17 +2,6 @@
 #include <vector>
 #include <functional>
 
-//	worth noting that if I want to add the edges as connections to both vertices' edge lists instead of
-//	just the 'source' vertex (as this currently mimics a directed graph), I could add a boolean for visitations
-//	for usage during Graph algorithms and then add the edge to each vertex's list when it is created.
-//	For directed graphs, however, the current implementation works well enough - each vertex maintains
-//	a list of its outgoing edges.
-
-//	when I eventually update this for both vertices to contain the edge, edge vectors must be updated to be
-//	vectors of edge pointers -- this way, both vertices will have a pointer to the same edge, rather than two copies
-//	of the same edge, and when that edge is visited in any pass, it will be considered visited from the other vertex's perspective
-//	as well.
-
 template <typename T> class Vertex
 {
 private:
@@ -34,7 +23,7 @@ private:
 		Vertex<T>* source;
 		Vertex<T>* dest;
 		int weight;
-		bool visited = false;
+		bool visited = false;	//	We'll see about this.
 	};
 
 	std::vector<Edge> edges;
@@ -49,6 +38,7 @@ public:
 	{
 		//	Create a new edge of weight w connecting to a new vertex of data val.
 		edges.push_back(Edge(new Vertex<T>(val), w));
+		edges.back().getDest().edges.push_back(Edge(this, w));
 	}
 
 	//	Function to connect to another already-created vertex.
@@ -56,6 +46,7 @@ public:
 	{
 		//	Connect to a pre-existing vertex
 		edges.push_back(Edge(&vert, w));
+		vert.edges.push_back(Edge(this, w));
 	}
 
 	//	Mark this node as visited and get its data value.
@@ -67,13 +58,13 @@ public:
 
 	//	Commit 7: Will update this function accordingly... if it becomes needed. Probably will anyways, for sake of completeness.
 	//	Get a vector of vertices connect to this one.
-	std::vector<Vertex<T>*> getVertices()	
+	std::vector<std::reference_wrapper<Vertex<T>>> getVertices()	
 	{
-		std::vector<Vertex<T>*> result;
+		std::vector<std::reference_wrapper<Vertex<T>>> result;
 		
-		for (typename std::vector<Edge>::iterator iter = edges.begin(); iter != edges.end(); ++iter)
+		for (auto& edge : edges)
 		{
-			result.push_back(&(iter->getDest()));
+			result.push_back(edge.getDest());
 		}
 
 		return result;
@@ -84,21 +75,12 @@ public:
 	{
 		std::vector<std::reference_wrapper<Vertex<T>>> result;
 
-		std::cout << "Print from getUnvisitedVertices()" << std::endl;
 		for(auto& edge : edges)
 		{
 			if (!(edge.getDest().visited))
-				result.push_back(edge.getDest());	//	as of C++11, should perform a move and safely create pointers to these addresses.
-			std::cout << edge.getDest().peek() << std::endl;
+				result.push_back(edge.getDest());
 		}
-		std::cout << std::endl;
 
 		return result;
-	}
-
-	//	Function for testing purposes.
-	T peek()	
-	{
-		return data;
 	}
 };

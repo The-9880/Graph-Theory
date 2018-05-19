@@ -60,46 +60,61 @@ public:
 		unmarkNodes(allVisited);
 	}
 
-	void pathTo(Vertex<T>* v, T target)
+	 static std::list<Vertex<T>*> pathTo(Vertex<T>& v, T target)
 	{
-		std::queue<Vertex<T>*> verts;
 		std::list<Vertex<T>*> allVisited;
+		std::list<Vertex<T>*> path;
 
-		verts.push_back(&v);
+		bool result = recursiveBFSPath(v, target, path, allVisited);	//	Modify recursiveBFSPath to function under this definition.
+		std::cout << std::endl;
+		
+		for (auto& vertex : path)
+		{
+			std::cout << vertex->visit() << " ";
+		}
+		std::cout << std::endl;
 
-		recursiveBFSPath(verts, target, allVisited);	//	Modify recursiveBFSPath to function under this definition.
+		unmarkNodes(allVisited);
+
+		return path;
 	}
 
-	bool recursiveBFSPath(std::queue<Vertex<T>*>& v, T target, std::list<Vertex<T>*>& vertices, bool flag=true)
+	static bool recursiveBFSPath(Vertex<T>& v, T target, std::list<Vertex<T>*>& path, std::list<Vertex<T>*>& visited)
 	{
-		std::list<Vertex<T>&> unVis;
+		std::vector<std::reference_wrapper<Vertex<T>>> unVis;
+		std::list<Vertex<T>*> pathFromHere;
 
-		//Base case: found the target.
-		if (v.visit() == target)
-		{
-			vertices.push_back(&v);
+		visited.push_back(&v);
+
+		if (v.visit() == target)	//	Right here - can, at this point, store 'path' in a super vector that holds vectors of successful paths
+		{							//	to be later compared with each other. Same thing at the other success point.
+			path.push_back(&v);
 			return true;
 		}
 		else
 		{
-			//	2 more cases to cover: 1) This isn't the target, and there are no more vertices to visit -- failed to find target value.
-			//	Other case: There are still more vertices to visit.
 			unVis = v.getUnvisitedVertices();
-			if (unVis.empty())
+
+			if (!unVis.empty())
 			{
-				//	Case one:
-				return false;
+				pathFromHere.push_back(&v);
+				for (auto& vertex : unVis)
+				{
+					if (recursiveBFSPath(vertex, target, pathFromHere, visited))
+					{
+						path.insert(std::end(path), std::begin(pathFromHere), std::end(pathFromHere));
+						return true;
+					}
+				}
 			}
 			else
 			{
-				for (auto& vertex : unVis)
-				{
-					vertices.push_back(vertex);
-				}
-				return recursiveBFSPath(v, target, vertices, true);
+				path.clear();
+				return false;
 			}
 		}
-		
+		path.clear();
+		return false;
 	}
 
 private:

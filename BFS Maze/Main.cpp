@@ -36,9 +36,10 @@ int main()
 	GraphAlgs<char>::BFS(v3, 'S');
 	GraphAlgs<char>::BFS(v7, 'S');
 
-	std::list<Vertex<char>*> path = GraphAlgs<char>::pathTo(v1, 'F');
-	GraphAlgs<char>::pathTo(v7, 'S');
-
+	std::list<Vertex<char>*> path = GraphAlgs<char>::DFSPathTo(v1, 'F');
+	GraphAlgs<char>::DFSPathTo(v7, 'S');
+	GraphAlgs<char>::DFSPathTo(v1, 'T');
+	GraphAlgs<char>::DFSPathTo(v1, 'P');
 
 	system("pause");
 	return 0;

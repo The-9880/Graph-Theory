@@ -60,12 +60,12 @@ public:
 		unmarkNodes(allVisited);
 	}
 
-	 static std::list<Vertex<T>*> pathTo(Vertex<T>& v, T target)
+	 static std::list<Vertex<T>*> DFSPathTo(Vertex<T>& v, T target)
 	{
 		std::list<Vertex<T>*> allVisited;
 		std::list<Vertex<T>*> path;
 
-		bool result = recursiveBFSPath(v, target, path, allVisited);	//	Modify recursiveBFSPath to function under this definition.
+		bool result = recursiveDFSPath(v, target, path, allVisited);	//	Modify recursiveBFSPath to function under this definition.
 		std::cout << std::endl;
 		
 		for (auto& vertex : path)
@@ -79,7 +79,7 @@ public:
 		return path;
 	}
 
-	static bool recursiveBFSPath(Vertex<T>& v, T target, std::list<Vertex<T>*>& path, std::list<Vertex<T>*>& visited)
+	static bool recursiveDFSPath(Vertex<T>& v, T target, std::list<Vertex<T>*>& path, std::list<Vertex<T>*>& visited)
 	{
 		std::vector<std::reference_wrapper<Vertex<T>>> unVis;
 		std::list<Vertex<T>*> pathFromHere;
@@ -100,7 +100,7 @@ public:
 				pathFromHere.push_back(&v);
 				for (auto& vertex : unVis)
 				{
-					if (recursiveBFSPath(vertex, target, pathFromHere, visited))
+					if (recursiveDFSPath(vertex, target, pathFromHere, visited))
 					{
 						path.insert(std::end(path), std::begin(pathFromHere), std::end(pathFromHere));
 						return true;
